@@ -1,0 +1,27 @@
+<resources>
+    <string name="app_name">ExerciseActivity</string>
+    <string name="error">錯誤</string>
+    <string name="ok">OK</string>
+    <string name="menu_park_intro">管區介紹</string>
+    <string name="menu_transportation">交通方式</string>
+    <string name="status_bar_height">status_bar_height</string>
+    <string name="dimen">dimen</string>
+    <string name="android">android</string>
+    //登入頁
+    <string name="txt_firstPage">首頁</string>
+    <string name="txt_welcome">歡迎光臨台北市立動物園</string>
+    <string name="txt_click_enter">點擊進入</string>
+    //首頁
+    <string name="txt_taipei_zoo">台北市立動物園</string>
+    <string name="txt_no_closed_info">無休館資訊</string>
+    //館內詳細頁
+    <string name="txt_open_in_web">在網頁開啟</string>
+    <string name="txt_animals_desc">%1$s-%2$s-%3$s-%4$s</string>
+    <string name="txt_animals_title">動物資料</string>
+    //動物詳細頁
+    <string name="txt_animals_category">門綱目科</string>
+    <string name="txt_animals_location">分佈</string>
+    <string name="txt_animals_feature">特色</string>
+    <string name="txt_animals_behavior">行為</string>
+    <string name="txt_animals_last_update_date">最後更新：%1$s</string>
+</resources>
