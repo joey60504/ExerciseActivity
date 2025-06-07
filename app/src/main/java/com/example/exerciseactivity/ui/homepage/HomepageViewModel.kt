@@ -33,21 +33,37 @@ class HomepageViewModel @Inject constructor(
     private val _displayPark = LiveEvent<List<Park>>()
     val displayPark: LiveData<List<Park>> = _displayPark
 
+    private val _displayTransport = LiveEvent<String>()
+    val displayTransport: LiveData<String> = _displayTransport
+
     private val _navigationToParkDetail = LiveEvent<Park>()
     val navigationToParkDetail: LiveData<Park> = _navigationToParkDetail
 
-    init {
-        viewModelScope.launch {
-            getParkDataUseCase()
-                .onStart {
-                    _showLoading.postValue(true)
-                }
-                .onCompletion {
-                    _showLoading.postValue(false)
-                }.collect { parkResult ->
-                    _displayPark.postValue(parkResult.parks)
-                }
+    private var parkList: List<Park>? = null
+
+    fun init() {
+        _showLoading.postValue(true)
+        if (parkList.isNullOrEmpty()) {
+            viewModelScope.launch {
+                getParkDataUseCase()
+                    .onStart {
+                        _showLoading.postValue(true)
+                    }
+                    .onCompletion {
+                        _showLoading.postValue(false)
+                    }.collect { parkResult ->
+                        parkList = parkResult.parks
+                        _displayPark.postValue(parkResult.parks)
+                    }
+            }
+        } else {
+            _displayPark.postValue(parkList ?: listOf())
+            _showLoading.postValue(false)
         }
+    }
+
+    fun initTransport() {
+        _displayTransport.postValue("https://www.zoo.gov.taipei/News_Content.aspx?n=9F0E68F3EC5B5751&sms=F3B2EF982C0582B3&s=01BD7568D718DAED")
     }
 
     fun onParkClick(park: Park) {

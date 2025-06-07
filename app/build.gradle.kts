@@ -41,11 +41,13 @@ android {
 }
 
 dependencies {
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1") // 引入 ViewModel 和 ViewModelScope
-    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.6.1") // 用於 LiveData
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.1") // 用於 Kotlin 扩展
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1")
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.6.1")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.1")
     // Dagger 2 核心
     implementation("com.google.dagger:dagger:2.50")
+    implementation(libs.androidx.navigation.fragment.ktx)
+    implementation(libs.androidx.navigation.ui.ktx)
     kapt("com.google.dagger:dagger-compiler:2.50")
 
     // Dagger Android 支持
@@ -78,4 +80,5 @@ dependencies {
     kapt("com.github.bumptech.glide:compiler:4.16.0")
 
     implementation(libs.androidx.paging.runtime.ktx)
+    implementation("androidx.fragment:fragment-ktx:1.7.1")
 }

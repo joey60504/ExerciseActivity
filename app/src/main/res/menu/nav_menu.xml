@@ -1,10 +1,10 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/nav_home"
+        android:id="@+id/homepageParkFragment"
         android:title="@string/menu_park_intro"
         android:icon="@drawable/ic_find"/>
     <item
-        android:id="@+id/nav_transport"
+        android:id="@+id/homepageTransportFragment"
         android:title="@string/menu_transportation"
         android:icon="@drawable/ic_pin"/>
 </menu>

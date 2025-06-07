@@ -1,48 +1,44 @@
 package com.example.exerciseactivity.ui.homepage
 
 import android.annotation.SuppressLint
-import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.view.ViewGroup
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.viewModels
-import androidx.core.os.bundleOf
 import androidx.core.view.GravityCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentTransaction
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.NavigationUI
+import com.example.exerciseactivity.R
 import com.example.exerciseactivity.databinding.ActivityHomepageBinding
-import com.example.exerciseactivity.di.withFactory
 import com.example.exerciseactivity.ui.BaseActivity
-import com.example.exerciseactivity.ui.parkdetail.ParkDetailActivity
-import javax.inject.Inject
 import kotlin.math.max
 
 class HomepageActivity : BaseActivity<ActivityHomepageBinding>() {
     override fun getViewBinding(): ActivityHomepageBinding {
         return ActivityHomepageBinding.inflate(layoutInflater)
     }
-
-    @Inject
-    lateinit var viewModelFactory: HomepageViewModel.Factory
-    private val viewModel: HomepageViewModel by viewModels {
-        withFactory(
-            viewModelFactory, intent.extras
-        )
-    }
+    private lateinit var appBarConfiguration: AppBarConfiguration
 
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
+        setUpNavController()
         setUpStatusBarDisplay()
         setUpListener()
-        setUpViewModelObserve()
     }
 
+    private fun setUpNavController() {
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.layout_container) as NavHostFragment
+        val navController = navHostFragment.navController
+        appBarConfiguration = AppBarConfiguration(navController.graph, binding.drawerLayout)
+        NavigationUI.setupWithNavController(binding.navigationView, navController)
+    }
 
     @SuppressLint("SetTextI18n")
     private fun setUpStatusBarDisplay() {
@@ -58,6 +54,12 @@ class HomepageActivity : BaseActivity<ActivityHomepageBinding>() {
                 systemBars.right,
                 max(ime.bottom, systemBars.bottom)
             )
+            val statusHeight = getStatusBarHeight()
+            binding.layoutConstraintlayout.layoutParams =
+                (binding.layoutConstraintlayout.layoutParams as ViewGroup.MarginLayoutParams).apply {
+                    setMargins(0, statusHeight, 0, 0)
+                }
+
             insets
         }
         WindowInsetsControllerCompat(window, window.decorView).isAppearanceLightStatusBars = true
@@ -68,46 +70,4 @@ class HomepageActivity : BaseActivity<ActivityHomepageBinding>() {
             binding.drawerLayout.openDrawer(GravityCompat.START)
         }
     }
-
-    private fun setUpViewModelObserve() {
-        viewModel.showLoading.observe(this) {
-            if (it) {
-                binding.layoutParkLoading.visibility = View.VISIBLE
-                binding.recyclerPark.visibility = View.GONE
-            } else {
-                binding.layoutParkLoading.visibility = View.GONE
-                binding.recyclerPark.visibility = View.VISIBLE
-            }
-        }
-
-        viewModel.displayPark.observe(this) {
-            val parkAdapter = HomepageParkAdapter(
-                it,
-                onParkClick = { park ->
-                    viewModel.onParkClick(park)
-                }
-            )
-            binding.recyclerPark.apply {
-                this.layoutManager = LinearLayoutManager(this@HomepageActivity)
-                setHasFixedSize(true)
-                this.adapter = parkAdapter
-            }
-        }
-
-        viewModel.navigationToParkDetail.observe(this) {
-            startActivity(Intent(this@HomepageActivity, ParkDetailActivity::class.java).apply {
-                putExtras(
-                    bundleOf(
-                        "Park" to it
-                    )
-                )
-            })
-        }
-    }
-}
-
-inline fun FragmentManager.inTransaction(action: FragmentTransaction.() -> Unit) {
-    beginTransaction().apply {
-        action()
-    }.commit()
 }
