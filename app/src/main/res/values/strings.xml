@@ -3,7 +3,8 @@
     <string name="error">錯誤</string>
     <string name="ok">OK</string>
     <string name="menu_park_intro">管區介紹</string>
-    <string name="menu_transportation">交通方式</string>
+    <string name="menu_park_map">園區地圖</string>
+    <string name="menu_park_transportation">交通方式</string>
     <string name="status_bar_height">status_bar_height</string>
     <string name="dimen">dimen</string>
     <string name="android">android</string>

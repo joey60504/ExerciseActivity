@@ -10,6 +10,10 @@
         android:label="Homepage Park" />
 
     <fragment
+        android:id="@+id/homepageMapFragment"
+        android:name="com.example.exerciseactivity.ui.homepage.HomepageMapFragment"
+        android:label="Map Fragment" />
+    <fragment
         android:id="@+id/homepageTransportFragment"
         android:name="com.example.exerciseactivity.ui.homepage.HomepageTransportFragment"
         android:label="Transport Fragment" />

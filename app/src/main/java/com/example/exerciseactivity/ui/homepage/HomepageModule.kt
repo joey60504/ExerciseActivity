@@ -22,5 +22,9 @@ abstract class HomepageModule {
 
     @FragmentScoped
     @ContributesAndroidInjector
+    internal abstract fun contributeMapFragment(): HomepageMapFragment
+
+    @FragmentScoped
+    @ContributesAndroidInjector
     internal abstract fun contributeTransportFragment(): HomepageTransportFragment
 }

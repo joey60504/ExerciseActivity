@@ -36,12 +36,22 @@ class HomepageViewModel @Inject constructor(
     private val _displayTransport = LiveEvent<String>()
     val displayTransport: LiveData<String> = _displayTransport
 
+    private val _displayMap = LiveEvent<String>()
+    val displayMap: LiveData<String> = _displayMap
+
+    private val _displayUcNavRight = LiveEvent<Boolean>()
+    val displayUcNavRight: LiveData<Boolean> = _displayUcNavRight
+
+    private val _displayDownload = LiveEvent<String>()
+    val displayDownload: LiveData<String> = _displayDownload
+
     private val _navigationToParkDetail = LiveEvent<Park>()
     val navigationToParkDetail: LiveData<Park> = _navigationToParkDetail
 
     private var parkList: List<Park>? = null
 
     fun init() {
+        _displayUcNavRight.postValue(false)
         _showLoading.postValue(true)
         if (parkList.isNullOrEmpty()) {
             viewModelScope.launch {
@@ -63,10 +73,20 @@ class HomepageViewModel @Inject constructor(
     }
 
     fun initTransport() {
+        _displayUcNavRight.postValue(false)
         _displayTransport.postValue("https://www.zoo.gov.taipei/News_Content.aspx?n=9F0E68F3EC5B5751&sms=F3B2EF982C0582B3&s=01BD7568D718DAED")
+    }
+
+    fun initMap() {
+        _displayUcNavRight.postValue(true)
+        _displayMap.postValue("https://www.zoo.gov.taipei/News_Content.aspx?n=E8BB5E02604E3BC7&sms=F3B2EF982C0582B3&s=BC8193C264494D92")
     }
 
     fun onParkClick(park: Park) {
         _navigationToParkDetail.postValue(park)
+    }
+
+    fun onDownloadClick() {
+        _displayDownload.postValue("https://www-ws.gov.taipei/001/Upload/432/relpic/21511/8040477/88855b76-085e-4d95-8b9e-7f7132d20ac9.jpg")
     }
 }
