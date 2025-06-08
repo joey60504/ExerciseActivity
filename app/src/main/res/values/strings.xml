@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">ExerciseActivity</string>
+    <string name="app_name">動物園App</string>
     <string name="error">錯誤</string>
     <string name="ok">OK</string>
     <string name="menu_park_intro">管區介紹</string>
