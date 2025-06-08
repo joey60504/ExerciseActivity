@@ -13,15 +13,14 @@ abstract class BaseActivity<B : ViewBinding> : DaggerAppCompatActivity() {
 
     lateinit var binding: B
 
-    // 讓子類實現此方法以返回 ViewBinding
     abstract fun getViewBinding(): B
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        AndroidInjection.inject(this)  // 進行 Dagger 注入
+        AndroidInjection.inject(this)
 
-        binding = getViewBinding()  // 取得 ViewBinding 實例
-        setContentView(binding.root)  // 設置視圖
+        binding = getViewBinding()
+        setContentView(binding.root)
 
         if (findViewById<View>(R.id.uc_nav) != null) {
             val nav = findViewById<View>(R.id.uc_nav)

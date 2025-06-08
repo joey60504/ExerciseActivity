@@ -132,7 +132,6 @@ class AnimalsDetailActivity : BaseActivity<ActivityAnimalsDetailBinding>() {
                         outputFormatter.format(dateTime)
                     ).ifBlank { "" }
             }
-
         }
     }
 }

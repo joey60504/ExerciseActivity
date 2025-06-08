@@ -150,6 +150,5 @@ class ParkDetailActivity : BaseActivity<ActivityParkDetailBinding>() {
                 )
             })
         }
-
     }
 }

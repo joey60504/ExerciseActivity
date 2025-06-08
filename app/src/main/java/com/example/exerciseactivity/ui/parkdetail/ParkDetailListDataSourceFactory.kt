@@ -6,8 +6,6 @@ import com.example.exerciseactivity.data.GetParkDataInfoUseCase
 import com.example.exerciseactivity.data.parameters.ParkDetailParameters
 import com.example.exerciseactivity.data.response.Park
 import com.example.exerciseactivity.data.response.ParkInfo
-import com.example.exerciseactivity.data.response.ParkResponseInfo
-import com.example.exerciseactivity.ui.BaseCallback
 
 class ParkDetailListDataSourceFactory  (
     private val getParkDataInfoUseCase: GetParkDataInfoUseCase,

@@ -75,7 +75,7 @@ class HomepageActivity : BaseActivity<ActivityHomepageBinding>() {
         NavigationUI.setupWithNavController(binding.navigationView, navController)
     }
 
-    private fun setUpPermissionLauncher(){
+    private fun setUpPermissionLauncher() {
         requestPermissionLauncher = registerForActivityResult(
             ActivityResultContracts.RequestPermission()
         ) { isGranted ->
@@ -106,7 +106,6 @@ class HomepageActivity : BaseActivity<ActivityHomepageBinding>() {
                 (binding.layoutConstraintlayout.layoutParams as ViewGroup.MarginLayoutParams).apply {
                     setMargins(0, statusHeight, 0, 0)
                 }
-
             insets
         }
         WindowInsetsControllerCompat(window, window.decorView).isAppearanceLightStatusBars = true
@@ -171,7 +170,6 @@ class HomepageActivity : BaseActivity<ActivityHomepageBinding>() {
                 }
             }
         }
-
     }
 
     private suspend fun downloadImageToDownloads(url: String) {
@@ -179,16 +177,12 @@ class HomepageActivity : BaseActivity<ActivityHomepageBinding>() {
             val client = OkHttpClient()
             val request = Request.Builder().url(url).build()
             val response = client.newCall(request).execute()
-
             if (!response.isSuccessful) {
                 throw Exception("下載失敗：${response.code}")
             }
-
             val inputStream = response.body?.byteStream()
                 ?: throw Exception("讀取失敗")
-
             val fileName = "taipei_image_${System.currentTimeMillis()}.jpg"
-
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 val values = ContentValues().apply {
                     put(MediaStore.Images.Media.DISPLAY_NAME, fileName)
@@ -196,15 +190,12 @@ class HomepageActivity : BaseActivity<ActivityHomepageBinding>() {
                     put(MediaStore.Images.Media.RELATIVE_PATH, Environment.DIRECTORY_PICTURES)
                     put(MediaStore.Images.Media.IS_PENDING, 1)
                 }
-
                 val resolver = contentResolver
                 val uri = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
                     ?: throw Exception("無法建立檔案URI")
-
                 resolver.openOutputStream(uri).use { outputStream ->
                     inputStream.copyTo(outputStream!!)
                 }
-
                 values.clear()
                 values.put(MediaStore.Images.Media.IS_PENDING, 0)
                 resolver.update(uri, values, null, null)

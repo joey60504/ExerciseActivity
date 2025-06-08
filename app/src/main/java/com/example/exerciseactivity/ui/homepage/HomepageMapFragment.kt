@@ -20,7 +20,6 @@ class HomepageMapFragment : BaseFragment(R.layout.fragment_map) {
     }
     private val binding by viewBinding(FragmentMapBinding::bind)
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.initMap()

@@ -44,7 +44,7 @@ class ParkDetailListAdapter(
     override fun getItemViewType(position: Int): Int {
         return when {
             position == 0 -> VIEW_TYPE_HEADER
-            position == 1 -> VIEW_TYPE_HEADER2
+            position == 1 && hasItemData() -> VIEW_TYPE_HEADER2
             hasExtraRow() && position == itemCount - 1 -> VIEW_TYPE_LOADING
             else -> VIEW_TYPE_ITEM
         }
@@ -52,8 +52,10 @@ class ParkDetailListAdapter(
 
 
     override fun getItemCount(): Int {
-        val count = super.getItemCount() + if (hasExtraRow()) 1 else 0
-        return count + 2 //  header = +1
+        val baseCount = super.getItemCount()
+        val extra = if (hasExtraRow()) 1 else 0
+        val header2Count = if (hasItemData()) 1 else 0
+        return baseCount + 1 + header2Count + extra
     }
 
 
@@ -137,6 +139,10 @@ class ParkDetailListAdapter(
     }
 
     private fun hasExtraRow() = networkState != null && networkState != NetworkState.LOADED
+
+    private fun hasItemData(): Boolean {
+        return currentList?.isNotEmpty() == true
+    }
 
     class HeaderViewHolder2(binding: ItemParkDetailHeader2Binding) :
         RecyclerView.ViewHolder(binding.root)

@@ -70,48 +70,31 @@ class ParkDetailListDataSource(
         }
     }
 
-    override fun loadBefore(params: LoadParams<Int>, callback: LoadCallback<Int, ParkInfo>) {
-        // 不需要處理
-    }
+    override fun loadBefore(params: LoadParams<Int>, callback: LoadCallback<Int, ParkInfo>) {}
 
     private suspend fun loadFilteredPage(startOffset: Int): Pair<List<ParkInfo>, Int?> {
         var offset = startOffset
         var filteredResult: List<ParkInfo>? = null
-
         while (true) {
             parameter.offset = offset
             parameter.limit = PAGE_SIZE
             parameter.showStart = offset
-
             val data = getParkDataInfoUseCase(parameter).first()
-
-            // API 無資料時結束
             if (data.parks.isEmpty()) {
                 break
             }
-
-            // 篩選符合 location 的資料
             val filtered = data.parks.filter { it.location == parameter.park?.name }
-
-            // 找到就用，跳出迴圈
             if (filtered.isNotEmpty()) {
                 filteredResult = filtered
                 break
             }
-
-            // 如果本頁資料不到 PAGE_SIZE 表示無更多資料
             if (data.parks.size < PAGE_SIZE) {
                 break
             }
-
-            // 下一頁繼續找
             offset += PAGE_SIZE
         }
-
         val resultList = filteredResult ?: emptyList()
-        // 如果找不到資料就回 null 表示沒下一頁
         val nextKey = if (resultList.isEmpty()) null else offset + PAGE_SIZE
-
         return resultList to nextKey
     }
 
