@@ -7,6 +7,9 @@ import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.model.GlideUrl
+import com.bumptech.glide.load.model.LazyHeaders
+import com.bumptech.glide.signature.ObjectKey
 import com.example.exerciseactivity.R
 import com.example.exerciseactivity.data.model.NetworkState
 import com.example.exerciseactivity.data.response.Park
@@ -150,9 +153,19 @@ class ParkDetailListAdapter(
     class HeaderViewHolder(private val binding: ItemParkDetailHeaderBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(park: Park, onWebClick: (Park) -> Unit) {
+
+            val glideUrl = GlideUrl(
+                park.picUrl.toHttps(),
+                LazyHeaders.Builder()
+                    .addHeader("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64)")
+                    .addHeader("Referer", "https://www.zoo.gov.tw")
+                    .build()
+            )
+
             Glide.with(itemView.context)
-                .load(park.picUrl)
-                .error(R.drawable.ic_img_error)
+                .load(glideUrl)
+                .signature(ObjectKey(park.picUrl))
+                .error(R.drawable.park_replace)
                 .into(binding.imgParkDetail)
 
             binding.txtParkDetailDesc.text = park.info
@@ -164,15 +177,29 @@ class ParkDetailListAdapter(
                 onWebClick(park)
             }
         }
+
+        private fun String.toHttps(): String {
+            return if (startsWith("http://")) {
+                "https://" + removePrefix("http://")
+            } else this
+        }
     }
 
     class ParkViewHolder(private val binding: ItemHomepageParkBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: ParkInfo?, onClick: (ParkInfo?) -> Unit) {
             item?.let {
+                val glideUrl = GlideUrl(
+                    item.pic01Url.toHttps(),
+                    LazyHeaders.Builder()
+                        .addHeader("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64)")
+                        .addHeader("Referer", "https://www.zoo.gov.tw")
+                        .build()
+                )
                 Glide.with(itemView.context)
-                    .load(item.pic01Url)
-                    .error(R.drawable.ic_img_error)
+                    .load(glideUrl)
+                    .signature(ObjectKey(item.pic01Url))
+                    .error(R.drawable.park_replace)
                     .into(binding.imgHomepagePark)
 
                 binding.txtParkName.text = it.nameCh
@@ -187,6 +214,12 @@ class ParkDetailListAdapter(
                     onClick(item)
                 }
             }
+        }
+
+        private fun String.toHttps(): String {
+            return if (startsWith("http://")) {
+                "https://" + removePrefix("http://")
+            } else this
         }
     }
 

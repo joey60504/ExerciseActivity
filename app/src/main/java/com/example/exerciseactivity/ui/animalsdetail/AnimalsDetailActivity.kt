@@ -12,6 +12,9 @@ import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.model.GlideUrl
+import com.bumptech.glide.load.model.LazyHeaders
+import com.bumptech.glide.signature.ObjectKey
 import com.example.exerciseactivity.R
 import com.example.exerciseactivity.databinding.ActivityAnimalsDetailBinding
 import com.example.exerciseactivity.di.withFactory
@@ -75,9 +78,18 @@ class AnimalsDetailActivity : BaseActivity<ActivityAnimalsDetailBinding>() {
         viewModel.displayAnimalsInfo.observe(this) { parkInfo ->
             parkInfo?.let {
                 //圖片
+                val glideUrl = GlideUrl(
+                    it.pic01Url.toHttps(),
+                    LazyHeaders.Builder()
+                        .addHeader("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64)")
+                        .addHeader("Referer", "https://www.zoo.gov.tw")
+                        .build()
+                )
+
                 Glide.with(this@AnimalsDetailActivity)
-                    .load(it.pic01Url)
-                    .error(R.drawable.ic_img_error)
+                    .load(glideUrl)
+                    .signature(ObjectKey(it.pic01Url))
+                    .error(R.drawable.park_replace)
                     .into(binding.imgAnimals)
                 //名稱
                 if (it.nameCh.isBlank() && it.nameEn.isBlank()) {
@@ -133,5 +145,10 @@ class AnimalsDetailActivity : BaseActivity<ActivityAnimalsDetailBinding>() {
                     ).ifBlank { "" }
             }
         }
+    }
+    private fun String.toHttps(): String {
+        return if (startsWith("http://")) {
+            "https://" + removePrefix("http://")
+        } else this
     }
 }
